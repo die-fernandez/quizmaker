@@ -10,16 +10,16 @@
     .config(function ($routeProvider) {
     $routeProvider
       .when('/', {
-            templateUrl: 'views/exam.html',
-            controller: 'QuestionCtrl'
+            templateUrl: 'app/views/exam.html',
+            controller: 'AppCtrl'
           })
       .when('/questions', {
-        templateUrl: 'views/questions.html',
+        templateUrl: 'app/views/questions.html',
         controller: 'QuestionCtrl'
       })
       .when('/result', {
-        templateUrl: 'views/goal/result.html',
-        controller: 'ResultCtrl'
+        templateUrl: 'app/views/goal/result.html',
+        controller: 'AttemptCtrl'
       })
       .otherwise({
         redirectTo: '/'
