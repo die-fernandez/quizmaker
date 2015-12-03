@@ -3,6 +3,7 @@ package com.trial.builder;
 import com.trial.domain.Answer;
 import com.trial.domain.Attempt;
 import com.trial.domain.Exam;
+import com.trial.domain.User;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class AttemptBuilder {
 
     private Exam exam;
     private Long id = DEFAULT_ID;
+    private User user;
 
     private AttemptBuilder() {
     }
@@ -40,6 +42,11 @@ public class AttemptBuilder {
         return this;
     }
 
+    public AttemptBuilder withUser(User user){
+        this.user = user;
+        return this;
+    }
+
     public AttemptBuilder andPassed(){
         this.passed = Boolean.TRUE;
         return this;
@@ -53,6 +60,7 @@ public class AttemptBuilder {
         attempt.setExam(exam);
         attempt.setStartTime(startTime);
         attempt.setId(id);
+        attempt.setUser(user);
         return attempt;
     }
 

@@ -1,10 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+<div class="question">
+	<h2>{{description}}</h2>
+	<ul ngRepeat="choice in exam.question.choices | orderBy: cindex">
+		<li>
+			<span>{{choice.description}}</span> 
+			<input type="radio" ng-model="choice.checked" value="red">
+		</li>
+	</ul>
+</div>

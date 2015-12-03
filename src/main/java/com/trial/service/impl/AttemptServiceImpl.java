@@ -1,16 +1,17 @@
 package com.trial.service.impl;
 
-import com.trial.domain.Answer;
-import com.trial.domain.Attempt;
-import com.trial.domain.Choice;
-import com.trial.domain.Question;
+import com.trial.builder.AttemptBuilder;
+import com.trial.domain.*;
 import com.trial.dto.AnswerDTO;
+import com.trial.dto.AttemptDto;
 import com.trial.helper.AttemptHelper;
 import com.trial.repository.AnswerRepository;
 import com.trial.repository.AttemptRepository;
+import com.trial.repository.ExamRepository;
 import com.trial.repository.QuestionRepository;
 import com.trial.service.AttemptService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.Duration;
@@ -21,13 +22,15 @@ import java.util.List;
  * Created by diego.fernandez on 12/1/15.
  */
 @Transactional
-
+@Service
 public class AttemptServiceImpl implements AttemptService{
 
     @Autowired
     AttemptRepository attemptRepository;
     @Autowired
     AnswerRepository answerRepository;
+    @Autowired
+    ExamRepository examRepository;
 
     /**
      * submits and save an answer for the current attemt
@@ -106,6 +109,27 @@ public class AttemptServiceImpl implements AttemptService{
         }
 
         attemptRepository.save(attempt);
+        return attempt;
+    }
+
+    @Override
+    public Attempt startAttempt(AttemptDto attemptDto, User user) {
+        //we recover the attempt if it exists
+        Attempt attempt = attemptRepository.findOneByUserId(user.getId());
+        if (attempt == null){
+            Exam exam = examRepository.findOne(attemptDto.getExamId());
+            // if no exam then we can't start the attempt
+            if (exam != null){
+                attempt = AttemptBuilder
+                        .anAttempt()
+                        .withExam(exam)
+                        .withUser(user)
+                        .build();
+                attemptRepository.save(attempt);
+
+            }else {throw new RuntimeException("Need exam to start an attempt");}
+
+        }
         return attempt;
     }
 

@@ -42,6 +42,11 @@
 
     this.saveToken = function(token){
        $window.sessionStorage.token = token;
+       console.log("token stored " + $window.sessionStorage.token);
+    }
+
+     this.getToken = function(){
+       return $window.sessionStorage.token;
     }
 
   }

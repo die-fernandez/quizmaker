@@ -34,7 +34,7 @@
         })
         .success(function(data, status, headers, config) {
           console.log("started with token " + data.access_token);
-          SessionSvn.saveToken(data.access_token);
+          SessionSvc.saveToken(data.access_token);
           SessionSvc.start();
 
 
@@ -61,10 +61,10 @@
     .controller("AppCtrl", AppController);
 
 
-  var QuestionController = function($scope, Question) {
+  var QuestionController = function($scope) {
 
   };
-  QuestionController.$inject = ['$scope', 'Question'];
+  QuestionController.$inject = ['$scope'];
   angular.module("myApp.controllers")
     .controller("QuestionCtrl", QuestionController);
 

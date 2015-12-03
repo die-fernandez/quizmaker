@@ -1,5 +1,6 @@
 package com.trial.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
@@ -24,6 +25,7 @@ public class User {
 
     private String email;
 
+    @JsonIgnore
     private String password;
 
     //roles are not persisted and return a unique role user

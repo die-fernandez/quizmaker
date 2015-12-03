@@ -46,10 +46,16 @@ public class OAuth2ServerConfiguration {
         public void configure(HttpSecurity http) throws Exception {
             http
                     .authorizeRequests()
-                    .antMatchers("/attempt").hasRole("USER")
-                    .antMatchers("/exams").permitAll()
-                    .antMatchers( "/oauth/token",HttpMethod.OPTIONS.toString()).permitAll()
-                    .antMatchers( "/oauth/token",HttpMethod.POST.toString()).permitAll();
+                    .antMatchers("/exams/**",HttpMethod.GET.toString()).permitAll()
+                    .antMatchers("/",HttpMethod.GET.toString()).permitAll()
+                    .antMatchers("/bower_components/**",HttpMethod.GET.toString()).permitAll()
+                    .antMatchers("/app/**",HttpMethod.GET.toString()).permitAll()
+                    /*.antMatchers(HttpMethod.POST, "*//**").fullyAuthenticated()
+                    .antMatchers(HttpMethod.GET, "*//**").fullyAuthenticated()
+                    .antMatchers(HttpMethod.PUT, "*//**").fullyAuthenticated()
+                    .antMatchers(HttpMethod.DELETE, "*//**").fullyAuthenticated()
+                    .antMatchers(HttpMethod.OPTIONS, "*//**").fullyAuthenticated();*/;
+
         }
 
     }
@@ -90,7 +96,6 @@ public class OAuth2ServerConfiguration {
                     .authorities("USER")
                     .scopes("read", "write")
                     .resourceIds(RESOURCE_ID)
-                    .autoApprove(true)
                     .secret("123456");
         }
 
@@ -105,6 +110,7 @@ public class OAuth2ServerConfiguration {
             DefaultTokenServices tokenServices = new DefaultTokenServices();
             tokenServices.setSupportRefreshToken(true);
             tokenServices.setTokenStore(tokenStore());
+            tokenServices.setAccessTokenValiditySeconds(18000);
             return tokenServices;
         }
 
