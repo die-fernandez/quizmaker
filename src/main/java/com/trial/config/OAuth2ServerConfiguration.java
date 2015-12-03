@@ -56,7 +56,10 @@ public class OAuth2ServerConfiguration {
     protected static class AuthorizationServerConfiguration extends
             AuthorizationServerConfigurerAdapter {
 
-        private TokenStore tokenStore = new InMemoryTokenStore();
+        @Bean
+        public TokenStore tokenStore() {
+            return new InMemoryTokenStore();
+        }
 
         @Autowired
         @Qualifier("authenticationManagerBean")
@@ -69,13 +72,14 @@ public class OAuth2ServerConfiguration {
         public void configure(AuthorizationServerEndpointsConfigurer endpoints)
                 throws Exception {
             endpoints
-                    .tokenStore(this.tokenStore)
+                    .tokenStore(this.tokenStore())
                     .authenticationManager(this.authenticationManager)
                     .userDetailsService(userDetailsService);
         }
 
         @Override
         public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+            //using plain client secret for the sake of simplicity
             clients
                     .inMemory()
                     .withClient("clientapp")
@@ -83,18 +87,13 @@ public class OAuth2ServerConfiguration {
                     .authorities("USER")
                     .scopes("read", "write")
                     .resourceIds(RESOURCE_ID)
+                    .autoApprove(true)
                     .secret("123456");
-        }
-
-        @Override
-        public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
-            oauthServer.passwordEncoder(passwordEncoder());
         }
 
         @Bean
         public PasswordEncoder passwordEncoder(){
-            PasswordEncoder encoder = new BCryptPasswordEncoder();
-            return encoder;
+            return new BCryptPasswordEncoder();
         }
 
         @Bean
@@ -102,7 +101,7 @@ public class OAuth2ServerConfiguration {
         public DefaultTokenServices tokenServices() {
             DefaultTokenServices tokenServices = new DefaultTokenServices();
             tokenServices.setSupportRefreshToken(true);
-            tokenServices.setTokenStore(this.tokenStore);
+            tokenServices.setTokenStore(tokenStore());
             return tokenServices;
         }
 
