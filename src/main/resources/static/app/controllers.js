@@ -1,6 +1,6 @@
 (function(angular) {
 
-  var AppController = function($scope,$http, Exam) {
+  var AppController = function($scope,$http, Exam, ENV) {
     Exam.query({"id":1},
         function(response) {
             $scope.exam = response ? response : [];
@@ -9,28 +9,23 @@
              console.log(error);
            });
     $scope.start = function(){
-        $http
-              .post('/oauth/token',{"user":$scope.user, "password":$scope.password})
-              .success(function (data, status, headers, config) {
-                $window.sessionStorage.token = data.access_token;
-                console.log("started with token" + data.access_token);
-              })
 
         $http({
             method: 'POST',
-            url: '/oauth/token',
+            url: 'http://'+ENV.server+'/oauth/token',
             params: {
                 password: $scope.password,
                 username: $scope.user,
                 grant_type: "password",
                 scope: "read write",
                 client_id: "clientapp",
-                client_secret: "123456"
-                headers: {
-                    'Accept: application/json',
-                    'Authorization: Basic '+ atob("clientapp:123456")
-                     };
-            }
+                client_secret: "123456",         
+            },
+            headers: {
+                    'Accept': 'application/json',
+                    'Authentication': 'Basic '+ btoa("clientapp:123456"),
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                     }
         }).success(function (data, status, headers, config) {
             console.log("started with token" + data.access_token);
 
@@ -41,7 +36,7 @@
 
   };
 
-  AppController.$inject = ['$scope','$http', 'Exam'];
+  AppController.$inject = ['$scope','$http', 'Exam', 'ENV'];
   angular.module("myApp.controllers").controller("AppCtrl", AppController);
 
 

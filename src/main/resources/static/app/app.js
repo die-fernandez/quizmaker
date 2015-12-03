@@ -5,7 +5,8 @@
     "ngResource",
     "myApp.controllers",
     "myApp.services",
-    'ngRoute'
+    'ngRoute',
+    'config'
     ])
     .config(function ($routeProvider) {
     $routeProvider

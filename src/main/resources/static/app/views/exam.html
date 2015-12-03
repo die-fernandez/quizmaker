@@ -1,6 +1,6 @@
 <div class="jumbotron exam">
     <p>{{exam.description}}</p>
-    <p>The time limit for this test is: {{exam.duration.seconds / 60}} minutes</p>
+    <p>The time limit for this test is: {{(exam.duration.seconds / 60) || ""}} minutes</p>
     <p>Enter your credentials to begin the test!</p>
 
     <div class="wrapper">
